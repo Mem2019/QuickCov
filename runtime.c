@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include <signal.h>
 #include <unistd.h>
 #include <sys/mman.h>
 
@@ -68,6 +69,15 @@ static void try_output_names(const char* names_path)
 		it = lb + 1; ++i;
 	}
 	fclose(fd);
+}
+
+void __cov_init() __attribute__((constructor(0)));
+void __cov_init()
+{ // Exit when error occurs, which writes the required coverage.
+	signal(SIGSEGV, exit);
+	signal(SIGBUS, exit);
+	signal(SIGABRT, exit);
+	signal(SIGFPE, exit);
 }
 
 void __cov_summarize() __attribute__((destructor(0)));
