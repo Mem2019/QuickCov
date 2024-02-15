@@ -31,6 +31,7 @@ int main(int argc, char const *argv[])
 		new_argv[idx++] = getenv("DEOPT_CC") ? getenv("DEOPT_CC") : DEOPT_CC;
 	new_argv[idx++] = "-g";
 	new_argv[idx++] = "-O0";
+	new_argv[idx++] = "-Wno-error";
 
 	// Important, otherwise mysterious errors might occur
 	new_argv[idx++] = "-Qunused-arguments";
@@ -45,6 +46,8 @@ int main(int argc, char const *argv[])
 		if (strstr(argv[i], "-g") == argv[i])
 			continue;
 		if (strstr(argv[i], "-flto") == argv[i])
+			continue;
+		if (strstr(argv[i], "-Werror") == argv[i])
 			continue;
 		if (!strcmp(argv[i], "-x")) x_set = true;
 		new_argv[idx++] = argv[i];
